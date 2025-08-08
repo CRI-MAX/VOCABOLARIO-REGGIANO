@@ -1,55 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const data = [
-    {
-      "italiano": "abbastanza",
-      "dialetto": "abâsta",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/abasta.mp3"
-    },
-    {
-      "italiano": "dietro",
-      "dialetto": "adrē",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/adree.mp3"
-    },
-    {
-      "italiano": "adesso",
-      "dialetto": "adès",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/ades.mp3"
-    },
-    {
-      "italiano": "acqua",
-      "dialetto": "acua",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/acua.mp3"
-    },
-    {
-      "italiano": "aglio",
-      "dialetto": "aj",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/aj.mp3"
-    },
-    {
-      "italiano": "alto",
-      "dialetto": "alt",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/alt.mp3"
-    },
-    {
-      "italiano": "amaro",
-      "dialetto": "amèr",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/amer.mp3"
-    },
-    {
-      "italiano": "amico",
-      "dialetto": "amîgh",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/amigh.mp3"
-    },
-    {
-      "italiano": "andare",
-      "dialetto": "andar",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/andar.mp3"
-    },
-    {
-      "italiano": "anello",
-      "dialetto": "anèl",
-      "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/anel.mp3"
-    }
+    { "italiano": "abbastanza", "dialetto": "abâsta", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/abasta.mp3" },
+    { "italiano": "dietro", "dialetto": "adrē", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/adree.mp3" },
+    { "italiano": "adesso", "dialetto": "adès", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/ades.mp3" },
+    { "italiano": "acqua", "dialetto": "acua", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/acua.mp3" },
+    { "italiano": "aglio", "dialetto": "aj", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/aj.mp3" },
+    { "italiano": "amaro", "dialetto": "amèr", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/amer.mp3" },
+    { "italiano": "amico", "dialetto": "amîgh", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/amigh.mp3" },
+    { "italiano": "andare", "dialetto": "andar", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/andar.mp3" },
+    { "italiano": "anello", "dialetto": "anèl", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/anel.mp3" }
   ];
 
   const searchInput = document.getElementById('searchInput');
@@ -108,15 +67,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let index = 0;
     const audio = new Audio();
 
-    const playNext = () => {
-      if (index >= filtered.length) return;
-      audio.src = filtered[index].audio;
-      audio.play();
-      index++;
-    };
+    audio.addEventListener('ended', () => {
+      if (index < filtered.length) {
+        audio.src = filtered[index].audio;
+        audio.play();
+        index++;
+      }
+    });
 
-    audio.addEventListener('ended', playNext);
-    playNext();
+    audio.src = filtered[index].audio;
+    audio.play();
+    index++;
   });
 
   // Mostra tutte le parole all'avvio
