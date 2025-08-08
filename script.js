@@ -119,6 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     playNext();
   });
 
-  // Render iniziale (tutte le parole)
+  // Mostra tutte le parole all'avvio
   renderResults(data);
 });
