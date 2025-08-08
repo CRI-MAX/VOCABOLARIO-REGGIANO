@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const styleSelector = document.getElementById("styleSelector");
   const playAllBtn = document.getElementById("playAllBtn");
   const stopBtn = document.getElementById("stopBtn");
+  const searchInput = document.getElementById("searchInput");
+  const nowPlaying = document.getElementById("nowPlaying");
 
   let currentIndex = 0;
   let isPlaying = false;
@@ -15,6 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/\s+/g, "_")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function normalizeText(text) {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "");
   }
 
   function checkAudioExists(fileName, callback) {
@@ -47,22 +57,22 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAudio = audio;
 
       console.log(`▶️ Riproduco: ${audioPath}`);
+      nowPlaying.textContent = `🔊 ${word.textContent}`;
 
-      // 🔄 Rimuove eventuali stili precedenti
       word.classList.remove("pulse", "glow", "shadow", "neon", "rainbow", "missing");
-
-      // ✅ Applica lo stile selezionato
       word.classList.add("pulse", style);
 
       audio.load();
       audio.play().then(() => {
         audio.addEventListener("ended", () => {
           word.classList.remove("pulse", style);
+          nowPlaying.textContent = "";
           if (onEndCallback) setTimeout(onEndCallback, 300);
         });
       }).catch((error) => {
         console.warn(`⚠️ Errore nella riproduzione di "${word.textContent}":`, error);
         word.classList.remove("pulse", style);
+        nowPlaying.textContent = "";
         if (onEndCallback) setTimeout(onEndCallback, 300);
       });
     });
@@ -81,8 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAudio.pause();
       currentAudio.currentTime = 0;
     }
+    nowPlaying.textContent = "";
     words.forEach(word => {
       word.classList.remove("pulse", "glow", "shadow", "neon", "rainbow", "missing");
+      word.style.display = "inline-block";
     });
   });
 
@@ -92,5 +104,20 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isPlaying) return;
       playSingleWord(word);
     });
+  });
+
+  // 🔍 Ricerca intelligente con accenti rimossi
+  searchInput.addEventListener("input", () => {
+    const query = normalizeText(searchInput.value.trim());
+    let found = false;
+
+    words.forEach(word => {
+      const wordText = normalizeText(word.textContent);
+      const match = wordText.includes(query);
+      word.style.display = match ? "inline-block" : "none";
+      if (match) found = true;
+    });
+
+    nowPlaying.textContent = found ? "" : "❌ Nessuna parola trovata";
   });
 });
