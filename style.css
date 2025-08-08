@@ -1,84 +1,72 @@
-/* Stile base */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
-}
-
-h1 {
-  text-align: center;
-  color: #800000;
-  margin-bottom: 30px;
-}
-
-/* Input e pulsanti */
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  font-size: 1em;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-button {
-  padding: 10px 20px;
-  font-size: 1em;
-  margin: 5px;
-  border: none;
-  border-radius: 6px;
-  background-color: #800000;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #a00000;
-}
-
-/* Risultati */
-#results {
-  margin-top: 20px;
-}
-
-.entry {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-}
-
-.entry h3 {
-  margin: 0;
-  color: #333;
-}
-
-.entry p {
-  margin: 5px 0;
-  color: #555;
-}
-
-/* Parola in riproduzione */
-#nowPlaying {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.playing {
-  animation: pulse 1s infinite;
+.word {
   display: inline-block;
-  color: #b30000;
-  font-size: 1.5em;
-  font-weight: bold;
+  margin: 0 8px;
+  font-size: 2rem;
+  transition: transform 0.3s ease;
 }
 
-/* Effetto pulsante */
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
+/* Effetto base */
+.pulse {
+  animation: pulseEffect 0.6s ease-in-out;
+}
+
+@keyframes pulseEffect {
+  0% {
+    transform: scale(1);
+    color: #333;
+  }
+  50% {
+    transform: scale(1.3);
+    color: #0078D7;
+  }
+  100% {
+    transform: scale(1);
+    color: #333;
+  }
+}
+
+/* Variante glow */
+.pulse.glow {
+  animation: glowPulse 0.8s ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% {
+    transform: scale(1);
+    text-shadow: none;
+    color: #333;
+  }
+  50% {
+    transform: scale(1.3);
+    color: #00bfff;
+    text-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff;
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: none;
+    color: #333;
+  }
+}
+
+/* Variante shadow */
+.pulse.shadow {
+  animation: shadowPulse 0.8s ease-in-out;
+}
+
+@keyframes shadowPulse {
+  0% {
+    transform: scale(1);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    color: #333;
+  }
+  50% {
+    transform: scale(1.3);
+    text-shadow: 4px 4px 12px rgba(0,0,0,0.5);
+    color: #ff6600;
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    color: #333;
+  }
 }

@@ -1,127 +1,61 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const data = [
-    { "italiano": "abbastanza", "dialetto": "abâsta", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/abasta.mp3" },
-    { "italiano": "dietro", "dialetto": "adrē", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/adree.mp3" },
-    { "italiano": "adesso", "dialetto": "adès", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/ades.mp3" },
-    { "italiano": "acqua", "dialetto": "acua", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/acua.mp3" },
-    { "italiano": "aglio", "dialetto": "aj", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/aj.mp3" },
-    { "italiano": "alto", "dialetto": "alt", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/alt.mp3" },
-    { "italiano": "amaro", "dialetto": "amèr", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/amer.mp3" },
-    { "italiano": "amico", "dialetto": "amîgh", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/amigh.mp3" },
-    { "italiano": "andare", "dialetto": "andar", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/andar.mp3" },
-    { "italiano": "anello", "dialetto": "anèl", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/anel.mp3" },
-    { "italiano": "animale", "dialetto": "bèstia", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/bestia.mp3" },
-    { "italiano": "asino", "dialetto": "asén", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/asen.mp3" },
-    { "italiano": "bambino", "dialetto": "bambén", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/bamben.mp3" },
-    { "italiano": "bello", "dialetto": "bèl", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/bel.mp3" },
-    { "italiano": "buono", "dialetto": "bòun", "audio": "https://lenguamedra.it/wp-content/uploads/2022/08/boun.mp3" }
-  ];
+document.addEventListener("DOMContentLoaded", () => {
+  const words = document.querySelectorAll(".word");
+  const styleSelector = document.getElementById("styleSelector");
+  const playAllBtn = document.getElementById("playAllBtn");
+  const stopBtn = document.getElementById("stopBtn");
 
-  const searchInput = document.getElementById('searchInput');
-  const resultsContainer = document.getElementById('results');
-  const playAllBtn = document.getElementById('playAllBtn');
-  const stopBtn = document.getElementById('stopBtn');
-  const nowPlaying = document.getElementById('nowPlaying');
-
-  let audio = new Audio();
+  let currentIndex = 0;
   let isPlaying = false;
-  let queue = [];
-  let index = 0;
+  let currentAudio = null;
 
-  function renderResults(filtered) {
-    resultsContainer.innerHTML = '';
+  function normalizeFileName(text) {
+    return text
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "_") // spazi → underscore
+      .normalize("NFD") // separa lettere e accenti
+      .replace(/[\u0300-\u036f]/g, ""); // rimuove accenti
+  }
 
-    if (filtered.length === 0) {
-      resultsContainer.innerHTML = '<p>Nessun risultato trovato.</p>';
-      return;
-    }
+  function playWord(index) {
+    if (!isPlaying || index >= words.length) return;
 
-    filtered.forEach(item => {
-      const entry = document.createElement('div');
-      entry.classList.add('entry');
+    const word = words[index];
+    const style = styleSelector.value;
+    const fileName = normalizeFileName(word.textContent);
+    const audio = new Audio(`audio/${fileName}.mp3`);
+    currentAudio = audio;
 
-      const italiano = document.createElement('h3');
-      italiano.textContent = item.italiano;
+    console.log(`▶️ Riproduco: ${fileName}.mp3`);
 
-      const dialetto = document.createElement('p');
-      dialetto.textContent = `Dialetto: ${item.dialetto}`;
+    word.classList.add("pulse", style);
 
-      const audioEl = document.createElement('audio');
-      audioEl.controls = true;
-      audioEl.src = item.audio;
-
-      entry.appendChild(italiano);
-      entry.appendChild(dialetto);
-      entry.appendChild(audioEl);
-
-      resultsContainer.appendChild(entry);
+    audio.load();
+    audio.play().then(() => {
+      audio.addEventListener("ended", () => {
+        word.classList.remove("pulse", style);
+        setTimeout(() => playWord(index + 1), 300);
+      });
+    }).catch((error) => {
+      console.warn(`⚠️ Errore nella riproduzione di "${word.textContent}":`, error);
+      word.classList.remove("pulse", style);
+      setTimeout(() => playWord(index + 1), 300);
     });
   }
 
-  function playNext() {
-    if (!isPlaying || index >= queue.length) {
-      nowPlaying.textContent = '';
-      return;
-    }
-
-    const current = queue[index];
-    nowPlaying.innerHTML = `<span class="playing"><strong>${current.italiano}</strong> → <em>${current.dialetto}</em></span>`;
-
-    audio.src = current.audio;
-    audio.load();
-
-    audio.oncanplaythrough = () => {
-      audio.play().catch(() => {
-        index++;
-        playNext();
-      });
-    };
-
-    audio.onended = () => {
-      index++;
-      playNext();
-    };
-
-    audio.onerror = () => {
-      index++;
-      playNext();
-    };
-  }
-
-  playAllBtn.addEventListener('click', () => {
-    const query = searchInput.value.toLowerCase();
-    queue = query
-      ? data.filter(item => item.italiano.toLowerCase().includes(query))
-      : [...data];
-
-    if (queue.length === 0) {
-      alert('Nessuna parola da riprodurre.');
-      return;
-    }
-
-    if (isPlaying) {
-      audio.pause();
-    }
-
+  playAllBtn.addEventListener("click", () => {
+    if (isPlaying) return;
     isPlaying = true;
-    index = 0;
-    playNext();
+    currentIndex = 0;
+    playWord(currentIndex);
   });
 
-  stopBtn.addEventListener('click', () => {
-    audio.pause();
-    audio.src = '';
+  stopBtn.addEventListener("click", () => {
     isPlaying = false;
-    nowPlaying.textContent = '';
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    }
+    words.forEach(word => word.classList.remove("pulse", "glow", "shadow"));
   });
-
-  searchInput.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase();
-    const filtered = data.filter(item =>
-      item.italiano.toLowerCase().includes(query)
-    );
-    renderResults(filtered);
-  });
-
-  renderResults(data);
 });

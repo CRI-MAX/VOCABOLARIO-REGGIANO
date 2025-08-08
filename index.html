@@ -8,12 +8,21 @@
 <body>
   <h1>Vocabolario Reggiano</h1>
 
-  <input type="text" id="searchInput" placeholder="Cerca una parola in italiano...">
-  <button id="playAllBtn">▶️ Riproduci tutto</button>
-  <button id="stopBtn">⏹️ Stop</button>
+  <div style="margin-bottom: 1rem;">
+    <input type="text" id="searchInput" placeholder="Cerca una parola in italiano...">
+    <button id="playAllBtn">▶️ Riproduci tutto</button>
+    <button id="stopBtn">⏹️ Stop</button>
+  </div>
+
+  <div style="margin-bottom: 1rem;">
+    <label for="styleSelector"><strong>Stile effetto:</strong></label>
+    <select id="styleSelector">
+      <option value="glow">Glow luminoso</option>
+      <option value="shadow">Ombra animata</option>
+    </select>
+  </div>
+
   <div id="nowPlaying"></div>
-
-
   <div id="results"></div>
 
   <!-- Carica lo script alla fine -->
