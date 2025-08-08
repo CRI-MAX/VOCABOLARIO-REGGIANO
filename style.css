@@ -1,0 +1,23 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  margin: 10px 0;
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+button {
+  margin-left: 10px;
+}
