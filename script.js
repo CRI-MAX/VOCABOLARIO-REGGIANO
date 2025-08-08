@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const stopBtn = document.getElementById('stopBtn');
   const nowPlaying = document.getElementById('nowPlaying');
 
+  let audio = new Audio();
   let isPlaying = false;
-  let currentAudio = null;
-  let playQueue = [];
-  let queueIndex = 0;
+  let queue = [];
+  let index = 0;
 
   function renderResults(filtered) {
     resultsContainer.innerHTML = '';
@@ -58,60 +58,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function playNextInQueue() {
-    if (!isPlaying || queueIndex >= playQueue.length) {
+  function playNext() {
+    if (!isPlaying || index >= queue.length) {
       nowPlaying.textContent = '';
       return;
     }
 
-    const current = playQueue[queueIndex];
+    const current = queue[index];
     nowPlaying.innerHTML = `<span class="playing"><strong>${current.italiano}</strong> → <em>${current.dialetto}</em></span>`;
 
-    currentAudio = new Audio(current.audio);
-    currentAudio.addEventListener('ended', () => {
-      queueIndex++;
-      playNextInQueue();
-    });
+    audio.src = current.audio;
+    audio.load();
 
-    currentAudio.addEventListener('error', () => {
-      queueIndex++;
-      playNextInQueue();
-    });
+    audio.oncanplaythrough = () => {
+      audio.play().catch(() => {
+        index++;
+        playNext();
+      });
+    };
 
-    currentAudio.play().catch(() => {
-      queueIndex++;
-      playNextInQueue();
-    });
+    audio.onended = () => {
+      index++;
+      playNext();
+    };
+
+    audio.onerror = () => {
+      index++;
+      playNext();
+    };
   }
 
   playAllBtn.addEventListener('click', () => {
     const query = searchInput.value.toLowerCase();
-    playQueue = query
+    queue = query
       ? data.filter(item => item.italiano.toLowerCase().includes(query))
       : [...data];
 
-    if (playQueue.length === 0) {
+    if (queue.length === 0) {
       alert('Nessuna parola da riprodurre.');
       return;
     }
 
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio = null;
+    if (isPlaying) {
+      audio.pause();
     }
 
     isPlaying = true;
-    queueIndex = 0;
-    playNextInQueue();
+    index = 0;
+    playNext();
   });
 
   stopBtn.addEventListener('click', () => {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio = null;
-    }
+    audio.pause();
+    audio.src = '';
     isPlaying = false;
-    queueIndex = 0;
     nowPlaying.textContent = '';
   });
 
