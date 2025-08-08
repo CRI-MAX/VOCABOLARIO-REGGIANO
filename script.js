@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let audio = null;
   let isPlaying = false;
+  let currentIndex = 0;
+  let currentList = [];
 
   function renderResults(filtered) {
     resultsContainer.innerHTML = '';
@@ -64,6 +66,50 @@ document.addEventListener('DOMContentLoaded', () => {
     renderResults(filtered);
   });
 
+  function playSequence(list) {
+    if (!list || list.length === 0) {
+      nowPlaying.textContent = '';
+      return;
+    }
+
+    isPlaying = true;
+    currentIndex = 0;
+    currentList = list;
+    audio = new Audio();
+
+    audio.addEventListener('ended', () => {
+      if (!isPlaying) return;
+      currentIndex++;
+      if (currentIndex < currentList.length) {
+        playCurrent();
+      } else {
+        nowPlaying.textContent = '';
+        isPlaying = false;
+      }
+    });
+
+    playCurrent();
+  }
+
+  function playCurrent() {
+    const current = currentList[currentIndex];
+    if (!current) return;
+
+    audio.src = current.audio;
+    nowPlaying.innerHTML = `<span class="playing"><strong>${current.italiano}</strong> → <em>${current.dialetto}</em></span>`;
+    audio.load();
+    audio.play().catch(() => {
+      // In caso di errore, passa alla prossima
+      currentIndex++;
+      if (currentIndex < currentList.length) {
+        playCurrent();
+      } else {
+        nowPlaying.textContent = '';
+        isPlaying = false;
+      }
+    });
+  }
+
   playAllBtn.addEventListener('click', () => {
     const query = searchInput.value.toLowerCase();
     const filtered = query
@@ -75,25 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    let index = 0;
-    isPlaying = true;
-    audio = new Audio();
+    if (isPlaying && audio) {
+      audio.pause();
+    }
 
-    const playNext = () => {
-      if (!isPlaying || index >= filtered.length) {
-        nowPlaying.textContent = '';
-        return;
-      }
-
-      const current = filtered[index];
-      audio.src = current.audio;
-      nowPlaying.innerHTML = `<span class="playing"><strong>${current.italiano}</strong> → <em>${current.dialetto}</em></span>`;
-      audio.play();
-      index++;
-    };
-
-    audio.addEventListener('ended', playNext);
-    playNext();
+    playSequence(filtered);
   });
 
   stopBtn.addEventListener('click', () => {
