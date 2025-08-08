@@ -47,6 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAudio = audio;
 
       console.log(`▶️ Riproduco: ${audioPath}`);
+
+      // 🔄 Rimuove eventuali stili precedenti
+      word.classList.remove("pulse", "glow", "shadow", "neon", "rainbow", "missing");
+
+      // ✅ Applica lo stile selezionato
       word.classList.add("pulse", style);
 
       audio.load();
@@ -84,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔊 Riproduzione singola al clic
   words.forEach(word => {
     word.addEventListener("click", () => {
-      if (isPlaying) return; // Evita conflitti con riproduzione automatica
+      if (isPlaying) return;
       playSingleWord(word);
     });
   });
