@@ -12,34 +12,54 @@ document.addEventListener("DOMContentLoaded", () => {
     return text
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, "_") // spazi → underscore
-      .normalize("NFD") // separa lettere e accenti
-      .replace(/[\u0300-\u036f]/g, ""); // rimuove accenti
+      .replace(/\s+/g, "_")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function checkAudioExists(fileName, callback) {
+    fetch(`audio/${fileName}.mp3`, { method: "HEAD" })
+      .then(response => callback(response.ok))
+      .catch(() => callback(false));
   }
 
   function playWord(index) {
     if (!isPlaying || index >= words.length) return;
 
     const word = words[index];
+    playSingleWord(word, () => playWord(index + 1));
+  }
+
+  function playSingleWord(word, onEndCallback = null) {
     const style = styleSelector.value;
     const fileName = normalizeFileName(word.textContent);
-    const audio = new Audio(`audio/${fileName}.mp3`);
-    currentAudio = audio;
+    const audioPath = `audio/${fileName}.mp3`;
 
-    console.log(`▶️ Riproduco: ${fileName}.mp3`);
+    checkAudioExists(fileName, exists => {
+      if (!exists) {
+        console.warn(`❌ Audio mancante: ${audioPath}`);
+        word.classList.add("missing");
+        if (onEndCallback) setTimeout(onEndCallback, 300);
+        return;
+      }
 
-    word.classList.add("pulse", style);
+      const audio = new Audio(audioPath);
+      currentAudio = audio;
 
-    audio.load();
-    audio.play().then(() => {
-      audio.addEventListener("ended", () => {
+      console.log(`▶️ Riproduco: ${audioPath}`);
+      word.classList.add("pulse", style);
+
+      audio.load();
+      audio.play().then(() => {
+        audio.addEventListener("ended", () => {
+          word.classList.remove("pulse", style);
+          if (onEndCallback) setTimeout(onEndCallback, 300);
+        });
+      }).catch((error) => {
+        console.warn(`⚠️ Errore nella riproduzione di "${word.textContent}":`, error);
         word.classList.remove("pulse", style);
-        setTimeout(() => playWord(index + 1), 300);
+        if (onEndCallback) setTimeout(onEndCallback, 300);
       });
-    }).catch((error) => {
-      console.warn(`⚠️ Errore nella riproduzione di "${word.textContent}":`, error);
-      word.classList.remove("pulse", style);
-      setTimeout(() => playWord(index + 1), 300);
     });
   }
 
@@ -56,6 +76,16 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAudio.pause();
       currentAudio.currentTime = 0;
     }
-    words.forEach(word => word.classList.remove("pulse", "glow", "shadow"));
+    words.forEach(word => {
+      word.classList.remove("pulse", "glow", "shadow", "neon", "rainbow", "missing");
+    });
+  });
+
+  // 🔊 Riproduzione singola al clic
+  words.forEach(word => {
+    word.addEventListener("click", () => {
+      if (isPlaying) return; // Evita conflitti con riproduzione automatica
+      playSingleWord(word);
+    });
   });
 });

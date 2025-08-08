@@ -17,7 +17,7 @@
   }
   50% {
     transform: scale(1.3);
-    color: #0078D7;
+    color: #0078D7; /* blu acceso */
   }
   100% {
     transform: scale(1);
@@ -69,4 +69,47 @@
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     color: #333;
   }
+}
+
+/* Variante neon verde */
+.pulse.neon {
+  animation: neonPulse 0.8s ease-in-out;
+}
+
+@keyframes neonPulse {
+  0% {
+    transform: scale(1);
+    color: #333;
+    text-shadow: none;
+  }
+  50% {
+    transform: scale(1.3);
+    color: #39ff14;
+    text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+  }
+  100% {
+    transform: scale(1);
+    color: #333;
+    text-shadow: none;
+  }
+}
+
+/* Variante arcobaleno */
+.pulse.rainbow {
+  animation: rainbowPulse 1s ease-in-out;
+}
+
+@keyframes rainbowPulse {
+  0% { color: red; transform: scale(1); }
+  25% { color: orange; transform: scale(1.2); }
+  50% { color: yellow; transform: scale(1.3); }
+  75% { color: green; transform: scale(1.2); }
+  100% { color: blue; transform: scale(1); }
+}
+
+/* Evidenziazione parole senza audio */
+.missing {
+  color: red;
+  font-weight: bold;
+  text-decoration: underline;
 }
