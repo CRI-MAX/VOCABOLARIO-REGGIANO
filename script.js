@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const resultsContainer = document.getElementById('results');
   const playAllBtn = document.getElementById('playAllBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const nowPlaying = document.getElementById('nowPlaying');
+
+  let audio = null;
+  let isPlaying = false;
 
   function renderResults(filtered) {
     resultsContainer.innerHTML = '';
@@ -33,13 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const dialetto = document.createElement('p');
       dialetto.textContent = `Dialetto: ${item.dialetto}`;
 
-      const audio = document.createElement('audio');
-      audio.controls = true;
-      audio.src = item.audio;
+      const audioEl = document.createElement('audio');
+      audioEl.controls = true;
+      audioEl.src = item.audio;
 
       entry.appendChild(italiano);
       entry.appendChild(dialetto);
-      entry.appendChild(audio);
+      entry.appendChild(audioEl);
 
       resultsContainer.appendChild(entry);
     });
@@ -65,19 +70,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let index = 0;
-    const audio = new Audio();
+    isPlaying = true;
+    audio = new Audio();
 
-    audio.addEventListener('ended', () => {
-      if (index < filtered.length) {
-        audio.src = filtered[index].audio;
-        audio.play();
-        index++;
+    const playNext = () => {
+      if (!isPlaying || index >= filtered.length) {
+        nowPlaying.textContent = '';
+        return;
       }
-    });
 
-    audio.src = filtered[index].audio;
-    audio.play();
-    index++;
+      const current = filtered[index];
+      audio.src = current.audio;
+      nowPlaying.innerHTML = `<strong>${current.italiano}</strong> → <em>${current.dialetto}</em>`;
+      audio.play();
+      index++;
+    };
+
+    audio.addEventListener('ended', playNext);
+    playNext();
+  });
+
+  stopBtn.addEventListener('click', () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    isPlaying = false;
+    nowPlaying.textContent = '';
   });
 
   // Mostra tutte le parole all'avvio
