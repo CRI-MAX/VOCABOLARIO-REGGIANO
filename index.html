@@ -2,41 +2,34 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Vocabolario Reggiano</title>
+  <title>Dialetto Reggiano</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Vocabolario Reggiano</h1>
+  <h1>🎧 Dialetto Reggiano</h1>
 
-  <div style="margin-bottom: 1rem;">
-    <input type="text" id="searchInput" placeholder="Cerca una parola in italiano...">
-    <button id="playAllBtn">▶️ Riproduci tutto</button>
-    <button id="stopBtn">⏹️ Stop</button>
-  </div>
+  <select id="styleSelector">
+    <option value="glow">Glow</option>
+    <option value="shadow">Shadow</option>
+    <option value="neon">Neon</option>
+    <option value="rainbow">Rainbow</option>
+  </select>
 
-  <div style="margin-bottom: 1rem;">
-    <label for="styleSelector"><strong>Stile effetto:</strong></label>
-    <select id="styleSelector">
-      <option value="glow">Glow luminoso</option>
-      <option value="shadow">Ombra animata</option>
-      <option value="neon">Neon verde</option>
-      <option value="rainbow">Arcobaleno</option>
-    </select>
-  </div>
+  <input type="text" id="searchInput" placeholder="🔍 Cerca una parola...">
+  <button id="playAllBtn">▶️ Riproduci tutto</button>
+  <button id="stopBtn">⏹️ Stop</button>
 
   <div id="nowPlaying"></div>
 
   <div id="results">
-    <!-- Esempio di parole -->
     <span class="word">Cà bela</span>
     <span class="word">Al dòm</span>
     <span class="word">Gnòc</span>
     <span class="word">Sgurbì</span>
-    <span class="word">Tgnìr</span>
-    <!-- Puoi aggiungere altre parole qui -->
+    <span class="word">Brusadèla</span>
+    <span class="word">Tgnént</span>
   </div>
 
-  <!-- Carica lo script alla fine -->
   <script src="script.js"></script>
 </body>
 </html>
