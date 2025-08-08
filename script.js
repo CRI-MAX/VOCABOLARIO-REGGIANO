@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const stopBtn = document.getElementById('stopBtn');
   const nowPlaying = document.getElementById('nowPlaying');
 
-  let audio = null;
   let isPlaying = false;
-  let currentIndex = 0;
-  let currentList = [];
+  let currentAudio = null;
+  let playQueue = [];
+  let queueIndex = 0;
 
   function renderResults(filtered) {
     resultsContainer.innerHTML = '';
@@ -58,83 +58,69 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function playNextInQueue() {
+    if (!isPlaying || queueIndex >= playQueue.length) {
+      nowPlaying.textContent = '';
+      return;
+    }
+
+    const current = playQueue[queueIndex];
+    nowPlaying.innerHTML = `<span class="playing"><strong>${current.italiano}</strong> → <em>${current.dialetto}</em></span>`;
+
+    currentAudio = new Audio(current.audio);
+    currentAudio.addEventListener('ended', () => {
+      queueIndex++;
+      playNextInQueue();
+    });
+
+    currentAudio.addEventListener('error', () => {
+      queueIndex++;
+      playNextInQueue();
+    });
+
+    currentAudio.play().catch(() => {
+      queueIndex++;
+      playNextInQueue();
+    });
+  }
+
+  playAllBtn.addEventListener('click', () => {
+    const query = searchInput.value.toLowerCase();
+    playQueue = query
+      ? data.filter(item => item.italiano.toLowerCase().includes(query))
+      : [...data];
+
+    if (playQueue.length === 0) {
+      alert('Nessuna parola da riprodurre.');
+      return;
+    }
+
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+
+    isPlaying = true;
+    queueIndex = 0;
+    playNextInQueue();
+  });
+
+  stopBtn.addEventListener('click', () => {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    isPlaying = false;
+    queueIndex = 0;
+    nowPlaying.textContent = '';
+  });
+
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
     const filtered = data.filter(item =>
       item.italiano.toLowerCase().includes(query)
     );
     renderResults(filtered);
-  });
-
-  function playSequence(list) {
-    if (!list || list.length === 0) {
-      nowPlaying.textContent = '';
-      return;
-    }
-
-    isPlaying = true;
-    currentIndex = 0;
-    currentList = list;
-    audio = new Audio();
-
-    audio.addEventListener('ended', () => {
-      if (!isPlaying) return;
-      currentIndex++;
-      if (currentIndex < currentList.length) {
-        playCurrent();
-      } else {
-        nowPlaying.textContent = '';
-        isPlaying = false;
-      }
-    });
-
-    playCurrent();
-  }
-
-  function playCurrent() {
-    const current = currentList[currentIndex];
-    if (!current) return;
-
-    audio.src = current.audio;
-    nowPlaying.innerHTML = `<span class="playing"><strong>${current.italiano}</strong> → <em>${current.dialetto}</em></span>`;
-    audio.load();
-    audio.play().catch(() => {
-      // In caso di errore, passa alla prossima
-      currentIndex++;
-      if (currentIndex < currentList.length) {
-        playCurrent();
-      } else {
-        nowPlaying.textContent = '';
-        isPlaying = false;
-      }
-    });
-  }
-
-  playAllBtn.addEventListener('click', () => {
-    const query = searchInput.value.toLowerCase();
-    const filtered = query
-      ? data.filter(item => item.italiano.toLowerCase().includes(query))
-      : data;
-
-    if (filtered.length === 0) {
-      alert('Nessuna parola da riprodurre.');
-      return;
-    }
-
-    if (isPlaying && audio) {
-      audio.pause();
-    }
-
-    playSequence(filtered);
-  });
-
-  stopBtn.addEventListener('click', () => {
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-    isPlaying = false;
-    nowPlaying.textContent = '';
   });
 
   renderResults(data);
