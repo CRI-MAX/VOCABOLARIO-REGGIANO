@@ -1,4 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const resultsContainer = document.getElementById("results");
+
+  const vocabolario = [
+    "Cà bela", "Al dòm", "Gnòc", "Sgurbì", "Brusadèla", "Tgnént",
+    "Sòta", "Bèla fiòla", "Strèla", "Mónd", "Pòca", "Zóca",
+    "Tàca", "Fóra", "Màgna", "Sgàrbia", "Tròpa", "Bóca", "Sgàta", "Ciópa"
+  ];
+
+  vocabolario.forEach(wordText => {
+    const span = document.createElement("span");
+    span.className = "word";
+    span.textContent = wordText;
+    resultsContainer.appendChild(span);
+  });
+
   const words = document.querySelectorAll(".word");
   const styleSelector = document.getElementById("styleSelector");
   const playAllBtn = document.getElementById("playAllBtn");
@@ -35,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function playWord(index) {
     if (!isPlaying || index >= words.length) return;
-
     const word = words[index];
     playSingleWord(word, () => playWord(index + 1));
   }
@@ -98,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 🔊 Riproduzione singola al clic
   words.forEach(word => {
     word.addEventListener("click", () => {
       if (isPlaying) return;
@@ -106,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 🔍 Ricerca intelligente con accenti rimossi
   searchInput.addEventListener("input", () => {
     const query = normalizeText(searchInput.value.trim());
     let found = false;
