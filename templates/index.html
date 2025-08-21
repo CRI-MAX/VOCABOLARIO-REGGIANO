@@ -1,59 +1,85 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Dizionario Reggiano</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Dizionario Reggiano</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-image: url("/static/img/anziano.jpg");
+      background-size: cover;
+      background-position: center 20%;
+      background-repeat: no-repeat;
+      color: white;
+      position: relative;
+    }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    input, textarea, button {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #f0c000;
+      cursor: pointer;
+    }
+    audio {
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
-    <!-- 🎵 Musica di benvenuto -->
-    <audio id="introAudio" autoplay>
-        <source src="{{ url_for('static', filename='audio/intro.mp3') }}" type="audio/mpeg">
-        Il tuo browser non supporta l'audio.
-    </audio>
+  <div class="overlay"></div>
+  <main>
+    <header>
+      <h1>Dizionario Reggiano</h1>
+      <p>Scopri ogni giorno una parola del dialetto reggiano</p>
+    </header>
 
-    <h1>📘 Dizionario Reggiano</h1>
-
-    <section class="frase">
-        <h2>📌 Frase del Giorno</h2>
-        <p><strong>Dialetto:</strong> {{ parola }}</p>
-        <p><strong>Italiano:</strong> {{ info.traduzione }}</p>
-        <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
-        {% if info.audio %}
-            <audio controls>
-                <source src="{{ url_for('static', filename='audio/' + info.audio) }}" type="audio/mpeg">
-                Il tuo browser non supporta l'audio.
-            </audio>
-        {% endif %}
+    <section>
+      <h2>Parola del Giorno</h2>
+      <h3>{{ parola }}</h3>
+      <p><strong>Traduzione:</strong> {{ info.traduzione }}</p>
+      <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
+      {% if info.audio %}
+        <audio controls src="/static/audio/{{ info.audio }}"></audio>
+      {% endif %}
     </section>
 
-    <section class="form">
-        <h2>💡 Proponi una nuova voce</h2>
-        <form action="{{ url_for('proponi') }}" method="post">
-            <input type="text" name="dialetto" placeholder="Frase in dialetto" required>
-            <input type="text" name="italiano" placeholder="Traduzione italiana" required>
-            <input type="text" name="spiegazione" placeholder="Spiegazione" required>
-            <button type="submit">📨 Invia</button>
-        </form>
+    <section>
+      <h2>Proponi una nuova voce</h2>
+      <form action="{{ url_for('proponi') }}" method="post">
+        <input name="dialetto" placeholder="Parola in dialetto" required>
+        <input name="italiano" placeholder="Traduzione in italiano" required>
+        <textarea name="spiegazione" placeholder="Spiegazione (opzionale)"></textarea>
+        <button type="submit">Invia</button>
+      </form>
     </section>
-
-    <p><a href="{{ url_for('dizionario') }}">📖 Vai al Dizionario</a></p>
-
-    <!-- 🎧 Script per affievolire la musica al primo clic -->
-    <script>
-        document.addEventListener("click", function () {
-            const audio = document.getElementById("introAudio");
-            if (audio && !audio.paused) {
-                const fadeOut = setInterval(() => {
-                    if (audio.volume > 0.05) {
-                        audio.volume -= 0.05;
-                    } else {
-                        audio.pause();
-                        clearInterval(fadeOut);
-                    }
-                }, 200);
-            }
-        }, { once: true });
-    </script>
+  </main>
 </body>
 </html>
