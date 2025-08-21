@@ -152,32 +152,62 @@ audio {
     width: 100%;
 }
 
-/* Responsive per mobile */
+/* ✅ Responsive per mobile */
 @media (max-width: 600px) {
-    body {
-        padding: 10px;
-        background-position: center 30%;
-    }
+  body {
+    padding: 10px;
+    background-position: center 30%;
+    overflow-x: hidden; /* evita scroll orizzontale */
+  }
 
-    main {
-        padding: 20px;
-    }
+  main {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-    h1 {
-        font-size: 1.6rem;
-    }
+  h1 {
+    font-size: 1.6rem;
+  }
 
-    h2 {
-        font-size: 1.3rem;
-    }
+  h2 {
+    font-size: 1.3rem;
+  }
 
-    button {
-        width: 100%;
-    }
+  button {
+    width: 100%;
+    font-size: 1rem;
+  }
 
-    input, textarea {
-        font-size: 0.9rem;
-    }
-    audio#introAudio {
+  input,
+  textarea {
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .alfabeto {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .alfabeto a {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    width: auto;
+    flex: 1 1 20%;
+    text-align: center;
+  }
+
+  .voci li {
+    font-size: 0.9rem;
+    padding: 10px;
+    word-wrap: break-word;
+  }
+
+  audio#introAudio {
     display: none;
+  }
 }
