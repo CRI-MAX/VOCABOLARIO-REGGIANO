@@ -6,6 +6,73 @@
   <meta name="description" content="Dizionario Reggiano: scopri le parole, traduzioni e audio del dialetto reggiano.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .alfabeto {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .alfabeto a {
+      margin: 0 0.3rem;
+      color: #f0c000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .alfabeto a:hover {
+      text-decoration: underline;
+    }
+
+    ul.voci {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.voci li {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    audio {
+      margin-top: 0.5rem;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      color: #f0c000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
   <div class="overlay"></div>
@@ -32,9 +99,11 @@
           {% endif %}
           {% if dati.audio %}
             <audio controls aria-label="Audio per {{ parola }}">
-              <source src="{{ url_for('static', filename='audio/' + dati.audio) }}" type="audio/mpeg">
+              <source src="{{ url_for('static', filename=dati.audio | replace('static/', '')) }}" type="audio/mpeg">
               Il tuo browser non supporta l'audio.
             </audio>
+          {% else %}
+            <p><em>🔇 Audio non disponibile</em></p>
           {% endif %}
         </li>
       {% else %}

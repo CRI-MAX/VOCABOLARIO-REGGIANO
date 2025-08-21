@@ -18,6 +18,24 @@ DIZIONARIO_PATH = "dizionario.json"
 FRASI_PATH = "frasi.json"
 FRASI_SUGGERITE_PATH = "frasi_suggerite.json"
 AUDIO_FOLDER = "static/audio"
+AUDIO_INDEX_PATH = "audio_index.json"
+
+# 🔍 Carica mappa audio
+try:
+    with open(AUDIO_INDEX_PATH, encoding="utf-8") as f:
+        AUDIO_INDEX = json.load(f)
+    logging.info("🔊 Mappa audio caricata con successo.")
+except Exception as e:
+    AUDIO_INDEX = {}
+    logging.error(f"❌ Errore nel caricamento di audio_index.json: {e}")
+
+# 🔊 Ottieni percorso audio da mappa
+def get_audio_path(parola):
+    chiave = normalizza_nome(parola)
+    percorso = AUDIO_INDEX.get(chiave)
+    if percorso:
+        return f"{AUDIO_FOLDER}/{percorso}"
+    return ""
 
 # 📄 Crea file vuoto se non esiste
 def crea_file_vuoto(path):
@@ -59,6 +77,7 @@ def parola_del_giorno():
         giorno = date.today().toordinal()
         parola = chiavi[giorno % len(chiavi)]
         info = dizionario[parola]
+        info["audio"] = get_audio_path(parola)
     else:
         parola = "Nessuna parola"
         info = {"traduzione": "", "spiegazione": "", "audio": ""}
@@ -91,6 +110,10 @@ def dizionario():
         filtrate = dizionario
         lettera = ""
 
+    # Aggiunge percorso audio a ogni voce
+    for parola, info in filtrate.items():
+        info["audio"] = get_audio_path(parola)
+
     logging.info(f"📘 Visualizzazione dizionario per lettera: '{lettera}'")
     return render_template("dizionario.html", dizionario=filtrate, lettera=lettera)
 
@@ -108,7 +131,7 @@ def proponi():
         dizionario[chiave] = {
             "traduzione": italiano,
             "spiegazione": spiegazione,
-            "audio": f"{chiave}.mp3",
+            "audio": get_audio_path(dialetto),
             "sinonimi": ""
         }
 
@@ -146,4 +169,4 @@ def approva_frase():
 
 # 🧩 Avvio server
 if __name__ == "__main__":
-    app.run(debug=False)  # Imposta a True solo in sviluppo
+    app.run(debug=False)

@@ -1,0 +1,4 @@
+# Evita file temporanei
+*.DS_Store
+*.tmp
+__pycache__/

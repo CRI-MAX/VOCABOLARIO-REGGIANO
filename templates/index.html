@@ -59,6 +59,7 @@
     audio {
       margin-top: 0.5rem;
       width: 100%;
+      max-width: 400px;
     }
 
     a {
@@ -91,12 +92,12 @@
       <p><strong>Traduzione:</strong> {{ info.traduzione }}</p>
       <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
       {% if info.audio %}
-      <audio controls aria-label="Ascolta la pronuncia">
-        <source src="{{ url_for('static', filename='audio/' ~ info.audio) }}" type="audio/mpeg">
-        Il tuo browser non supporta l'audio.
-      </audio>
+        <audio controls aria-label="Ascolta la pronuncia">
+          <source src="{{ url_for('static', filename=info.audio | replace('static/', '')) }}" type="audio/mpeg">
+          Il tuo browser non supporta l'audio.
+        </audio>
       {% else %}
-      <p><em>Audio non disponibile</em></p>
+        <p><em>🔇 Audio non disponibile</em></p>
       {% endif %}
     </section>
 
@@ -147,11 +148,9 @@
       }, 50);
     }
 
-    // Avvio musica al primo tocco o clic
     window.addEventListener("click", startAudio, { once: true });
     window.addEventListener("touchstart", startAudio, { once: true });
 
-    // Interrompi musica in dissolvenza al clic su link o pulsanti
     document.querySelectorAll("a, button").forEach(el => {
       el.addEventListener("click", () => {
         fadeOutAudio();
