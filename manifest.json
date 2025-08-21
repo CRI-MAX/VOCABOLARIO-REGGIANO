@@ -1,0 +1,15 @@
+{
+  "name": "Dizionario Reggiano",
+  "short_name": "Reggiano",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e3c72",
+  "theme_color": "#f0c000",
+  "icons": [
+    {
+      "src": "/static/icons/rofaldo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
