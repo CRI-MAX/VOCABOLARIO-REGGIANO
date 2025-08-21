@@ -1,187 +1,107 @@
 /* Impostazioni generali */
 body {
-  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
-  color: white;
-  background-image: url("/static/img/anziano.jpg"), linear-gradient(to right, #1e3c72, #2a5298);
-  background-blend-mode: overlay;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url("/static/immagini/sfondo.jpg");
   background-size: cover;
-  background-position: center 20%;
+  background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  transition: background-image 1s ease-in-out;
-  position: relative;
+  color: #f4f4f4;
 }
 
-/* Overlay */
-.overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Contenuto principale */
-main {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: auto;
-  background-color: rgba(0, 0, 0, 0.6);
+/* Header */
+header {
+  text-align: center;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-/* Titoli */
-h1, h2, h3, p {
-  text-align: center;
-  margin: 0.5rem 0;
-}
-
-h1 {
+  background-color: rgba(0, 0, 0, 0.7);
   font-size: 2rem;
-  color: #f0c000;
-}
-
-h2 {
-  font-size: 1.5rem;
-  color: #f0c000;
-}
-
-h3 {
-  font-size: 1.2rem;
-  color: #f0c000;
-}
-
-/* Navigazione alfabetica */
-.alfabeto {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.alfabeto a {
-  margin: 0 5px;
-  color: #f0c000;
-  text-decoration: none;
   font-weight: bold;
 }
 
-.alfabeto a:hover {
-  text-decoration: underline;
+/* Sezione Parola del Giorno */
+#parola-del-giorno {
+  margin: 2rem auto;
+  padding: 1rem;
+  max-width: 600px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  text-align: center;
 }
 
-/* Lista voci */
-ul.voci {
-  list-style: none;
-  padding: 0;
+/* Form proposta nuova parola */
+form {
+  margin: 2rem auto;
+  max-width: 600px;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
-ul.voci li {
+form input,
+form textarea {
+  width: 100%;
   margin-bottom: 1rem;
   padding: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-}
-
-/* Form */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-input, textarea, button {
-  padding: 0.5rem;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
   font-size: 1rem;
 }
 
-button {
+form button {
   background-color: #f0c000;
-  color: black;
-  font-weight: bold;
+  color: #000;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
-button:hover {
-  background-color: #d4aa00;
+form button:hover {
+  background-color: #ffd700;
 }
 
-/* Link */
-a {
-  color: #f0c000;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Link di ritorno */
-a.back {
+/* Link al dizionario completo */
+#link-dizionario {
   display: block;
   text-align: center;
   margin-top: 2rem;
+  font-size: 1.2rem;
   color: #f0c000;
-  text-decoration: none;
-}
-
-a.back:hover {
   text-decoration: underline;
 }
 
-/* Audio */
+/* Audio player */
+.audio-player {
+  margin-top: 1rem;
+  text-align: center;
+}
+
 audio {
-  margin-top: 0.5rem;
   width: 100%;
+  max-width: 300px;
 }
 
 /* Responsive */
 @media screen and (max-width: 600px) {
-  body {
-    padding: 10px;
-    background-position: center 30%;
-    overflow-x: hidden;
+  header {
+    font-size: 1.5rem;
   }
 
-  main {
+  #parola-del-giorno,
+  form {
+    margin: 1rem;
     padding: 1rem;
-    max-width: 100%;
-    border-radius: 0;
-    box-shadow: none;
   }
 
-  h1 {
-    font-size: 1.8rem;
+  form input,
+  form textarea {
+    font-size: 0.9rem;
   }
 
-  h2 {
-    font-size: 1.4rem;
-  }
-
-  h3 {
-    font-size: 1.2rem;
-  }
-
-  input, textarea, button {
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .alfabeto a {
-    display: inline-block;
-    margin: 3px;
-    font-size: 1rem;
-  }
-
-  ul.voci li {
-    font-size: 0.95rem;
+  form button {
+    font-size: 0.9rem;
   }
 }

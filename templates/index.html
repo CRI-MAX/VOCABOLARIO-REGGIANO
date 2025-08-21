@@ -24,17 +24,7 @@
       color: white;
     }
 
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 0;
-    }
-
     main {
-      position: relative;
-      z-index: 1;
       padding: 2rem;
       max-width: 800px;
       margin: auto;
@@ -82,10 +72,9 @@
   </style>
 </head>
 <body>
-  <div class="overlay"></div>
 
   <!-- Musica di sottofondo -->
-  <audio id="introAudio" autoplay muted loop>
+  <audio id="introAudio" preload="auto" loop>
     <source src="{{ url_for('static', filename='audio/intro.mp3') }}" type="audio/mpeg">
     Il tuo browser non supporta l'audio.
   </audio>
@@ -102,13 +91,13 @@
       <p><strong>Traduzione:</strong> {{ info.traduzione }}</p>
       <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
       {% if info.audio %}
-  <audio controls aria-label="Ascolta la pronuncia">
-    <source src="{{ url_for('static', filename='audio/' ~ info.audio) }}" type="audio/mpeg">
-    Il tuo browser non supporta l'audio.
-  </audio>
-{% else %}
-  <p><em>Audio non disponibile</em></p>
-{% endif %}
+      <audio controls aria-label="Ascolta la pronuncia">
+        <source src="{{ url_for('static', filename='audio/' ~ info.audio) }}" type="audio/mpeg">
+        Il tuo browser non supporta l'audio.
+      </audio>
+      {% else %}
+      <p><em>Audio non disponibile</em></p>
+      {% endif %}
     </section>
 
     <section>
@@ -132,42 +121,21 @@
     </p>
   </main>
 
-  <!-- Script dissolvenza audio -->
+  <!-- Script per avvio audio dopo interazione -->
   <script>
     const audio = document.getElementById("introAudio");
 
-    window.addEventListener("DOMContentLoaded", () => {
-      audio.muted = false;
+    function startAudio() {
       audio.volume = 1.0;
       audio.play().catch(() => {
         console.log("Autoplay bloccato dal browser");
       });
-    });
-    window.onload = () => {
-  audio.muted = false;
-  audio.play().catch(() => {});
-};
-    function fadeOutAudio() {
-      const fadeInterval = setInterval(() => {
-        if (audio.volume > 0.01) {
-          audio.volume -= 0.01;
-        } else {
-          audio.pause();
-          clearInterval(fadeInterval);
-        }
-      }, 50);
+      window.removeEventListener("click", startAudio);
+      window.removeEventListener("touchstart", startAudio);
     }
 
-    function handleInteraction() {
-      fadeOutAudio();
-      window.removeEventListener("keydown", handleInteraction);
-      window.removeEventListener("click", handleInteraction);
-      window.removeEventListener("touchstart", handleInteraction);
-    }
-
-    window.addEventListener("keydown", handleInteraction);
-    window.addEventListener("click", handleInteraction);
-    window.addEventListener("touchstart", handleInteraction);
+    window.addEventListener("click", startAudio);
+    window.addEventListener("touchstart", startAudio);
   </script>
 </body>
 </html>
