@@ -65,8 +65,8 @@
   <div class="overlay"></div>
 
   <!-- Musica di sottofondo -->
-  <audio autoplay loop>
-    <source src="/static/audio/musica.mp3" type="audio/mpeg">
+  <audio id="introAudio" autoplay>
+    <source src="{{ url_for('static', filename='audio/intro.mp3') }}" type="audio/mpeg">
     Il tuo browser non supporta l'audio.
   </audio>
 
@@ -109,5 +109,35 @@
       <a href="{{ url_for('dizionario') }}">📘 Vai al dizionario completo</a>
     </p>
   </main>
+
+  <!-- Script dissolvenza audio -->
+  <script>
+    const audio = document.getElementById("introAudio");
+    audio.volume = 1.0;
+
+    function fadeOutAudio() {
+      let volume = audio.volume;
+      const fadeInterval = setInterval(() => {
+        if (volume > 0.01) {
+          volume -= 0.01;
+          audio.volume = volume;
+        } else {
+          audio.pause();
+          clearInterval(fadeInterval);
+        }
+      }, 50);
+    }
+
+    function handleInteraction() {
+      fadeOutAudio();
+      window.removeEventListener("keydown", handleInteraction);
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    }
+
+    window.addEventListener("keydown", handleInteraction);
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+  </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdf6e3;
-    background-image: url("/static/images/sfondo.jpg"); /* ✅ Percorso corretto */
+    background-image: url("/static/immagini/sfondo.jpg"); /* ✅ Percorso corretto */
     background-size: cover;
     background-position: center 20%;
     background-repeat: no-repeat;
