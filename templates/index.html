@@ -96,6 +96,7 @@
     .no-audio {
       color: #888;
       font-style: italic;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
@@ -119,10 +120,11 @@
       <p><strong>Traduzione:</strong> {{ info.traduzione }}</p>
       <p><strong>Spiegazione:</strong> {{ info.spiegazione or "—" }}</p>
       {% if info.audio %}
-        <audio controls aria-label="Ascolta la pronuncia">
+        <audio controls aria-label="Ascolta la pronuncia" onerror="this.style.display='none'; document.getElementById('fallbackAudio').style.display='block';">
           <source src="{{ url_for('static', filename='audio/' + info.audio) }}" type="audio/mpeg">
           Il tuo browser non supporta l'audio.
         </audio>
+        <p id="fallbackAudio" class="no-audio" style="display:none;">🔇 Audio non disponibile</p>
       {% else %}
         <p class="no-audio">🔇 Audio non disponibile</p>
       {% endif %}
