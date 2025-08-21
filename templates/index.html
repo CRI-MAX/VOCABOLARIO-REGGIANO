@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- 🎵 Musica di benvenuto -->
+    <audio id="introAudio" autoplay>
+        <source src="{{ url_for('static', filename='audio/intro.mp3') }}" type="audio/mpeg">
+        Il tuo browser non supporta l'audio.
+    </audio>
+
     <h1>📘 Dizionario Reggiano</h1>
 
     <section class="frase">
@@ -32,5 +38,22 @@
     </section>
 
     <p><a href="{{ url_for('dizionario') }}">📖 Vai al Dizionario</a></p>
+
+    <!-- 🎧 Script per affievolire la musica al primo clic -->
+    <script>
+        document.addEventListener("click", function () {
+            const audio = document.getElementById("introAudio");
+            if (audio && !audio.paused) {
+                const fadeOut = setInterval(() => {
+                    if (audio.volume > 0.05) {
+                        audio.volume -= 0.05;
+                    } else {
+                        audio.pause();
+                        clearInterval(fadeOut);
+                    }
+                }, 200);
+            }
+        }, { once: true });
+    </script>
 </body>
 </html>

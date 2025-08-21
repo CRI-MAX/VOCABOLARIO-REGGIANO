@@ -1,11 +1,19 @@
+/* Impostazioni generali */
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #fdf6e3;
+    background-image: url("images/sfondo.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: #333;
     margin: 0;
     padding: 20px;
+    transition: background-image 1s ease-in-out;
 }
 
+/* Titoli */
 h1 {
     color: #b58900;
     text-align: center;
@@ -17,6 +25,7 @@ h2 {
     margin-top: 20px;
 }
 
+/* Link */
 a {
     color: #859900;
     text-decoration: none;
@@ -28,14 +37,16 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Sezioni frase e form */
 .frase, .form {
-    background-color: #eee8d5;
+    background-color: rgba(238, 232, 213, 0.9); /* sfondo semi-trasparente */
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 30px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Input testo */
 input[type="text"] {
     width: 100%;
     padding: 8px;
@@ -44,6 +55,7 @@ input[type="text"] {
     border-radius: 4px;
 }
 
+/* Pulsanti */
 button {
     background-color: #859900;
     color: white;
@@ -52,12 +64,14 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #657b83;
 }
 
+/* Alfabeto */
 .alfabeto {
     text-align: center;
     margin-bottom: 20px;
@@ -70,8 +84,14 @@ button:hover {
     padding: 5px 10px;
     margin: 2px;
     border-radius: 4px;
+    transition: background-color 0.3s ease;
 }
 
+.alfabeto a:hover {
+    background-color: #cb9800;
+}
+
+/* Lista voci */
 .voci {
     list-style: none;
     padding: 0;
@@ -83,4 +103,5 @@ button:hover {
     padding: 10px;
     border-left: 5px solid #268bd2;
     border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
