@@ -9,7 +9,16 @@ AUDIO_FOLDER = "static/audio"
 def carica_dizionario():
     if os.path.exists(DIZIONARIO_PATH):
         with open(DIZIONARIO_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
+            contenuto = f.read().strip()
+            if contenuto:
+                try:
+                    return json.loads(contenuto)
+                except json.JSONDecodeError:
+                    print("⚠️ Errore nel file JSON: formato non valido.")
+                    return {}
+            else:
+                print("ℹ️ File JSON vuoto, inizializzo dizionario vuoto.")
+                return {}
     return {}
 
 def salva_dizionario(dizionario):
