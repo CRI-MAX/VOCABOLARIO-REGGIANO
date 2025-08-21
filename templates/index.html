@@ -93,7 +93,7 @@
       <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
       {% if info.audio %}
         <audio controls aria-label="Ascolta la pronuncia">
-          <source src="{{ url_for('static', filename=info.audio | replace('static/', '')) }}" type="audio/mpeg">
+          <source src="{{ url_for('static', filename=info.audio) }}" type="audio/mpeg">
           Il tuo browser non supporta l'audio.
         </audio>
       {% else %}
