@@ -1,49 +1,36 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Dialetto Reggiano</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Dizionario Reggiano</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>🎧 Dialetto Reggiano</h1>
+    <h1>📘 Dizionario Reggiano</h1>
 
-  <select id="styleSelector">
-    <option value="glow">Glow</option>
-    <option value="shadow">Shadow</option>
-    <option value="neon">Neon</option>
-    <option value="rainbow">Rainbow</option>
-  </select>
+    <section class="frase">
+        <h2>📌 Frase del Giorno</h2>
+        <p><strong>Dialetto:</strong> {{ parola }}</p>
+        <p><strong>Italiano:</strong> {{ info.traduzione }}</p>
+        <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
+        {% if info.audio %}
+            <audio controls>
+                <source src="{{ url_for('static', filename='audio/' + info.audio) }}" type="audio/mpeg">
+                Il tuo browser non supporta l'audio.
+            </audio>
+        {% endif %}
+    </section>
 
-  <input type="text" id="searchInput" placeholder="🔍 Cerca una parola...">
-  <button id="playAllBtn">▶️ Riproduci tutto</button>
-  <button id="stopBtn">⏹️ Stop</button>
+    <section class="form">
+        <h2>💡 Proponi una nuova voce</h2>
+        <form action="{{ url_for('proponi') }}" method="post">
+            <input type="text" name="dialetto" placeholder="Frase in dialetto" required>
+            <input type="text" name="italiano" placeholder="Traduzione italiana" required>
+            <input type="text" name="spiegazione" placeholder="Spiegazione" required>
+            <button type="submit">📨 Invia</button>
+        </form>
+    </section>
 
-  <div id="nowPlaying"></div>
-
-  <div id="results">
-    <span class="word">Cà bela</span>
-    <span class="word">Al dòm</span>
-    <span class="word">Gnòc</span>
-    <span class="word">Sgurbì</span>
-    <span class="word">Brusadèla</span>
-    <span class="word">Tgnént</span>
-    <span class="word">Sòta</span>
-    <span class="word">Bèla fiòla</span>
-    <span class="word">Strèla</span>
-    <span class="word">Mónd</span>
-    <span class="word">Pòca</span>
-    <span class="word">Zóca</span>
-    <span class="word">Tàca</span>
-    <span class="word">Fóra</span>
-    <span class="word">Màgna</span>
-    <span class="word">Sgàrbia</span>
-    <span class="word">Tròpa</span>
-    <span class="word">Bóca</span>
-    <span class="word">Sgàta</span>
-    <span class="word">Ciópa</span>
-  </div>
-
-  <script src="script.js"></script>
+    <p><a href="{{ url_for('dizionario') }}">📖 Vai al Dizionario</a></p>
 </body>
 </html>

@@ -1,61 +1,86 @@
 body {
-  font-family: sans-serif;
-  padding: 20px;
-  background: #f9f9f9;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fdf6e3;
+    color: #333;
+    margin: 0;
+    padding: 20px;
 }
 
-.word {
-  display: inline-block;
-  margin: 8px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  background: #eee;
-  cursor: pointer;
-  transition: transform 0.3s;
+h1 {
+    color: #b58900;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.word:hover {
-  background: #ddd;
-  transform: scale(1.05);
+h2 {
+    color: #268bd2;
+    margin-top: 20px;
 }
 
-#nowPlaying {
-  margin-top: 20px;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #333;
+a {
+    color: #859900;
+    text-decoration: none;
+    margin: 0 5px;
+    font-weight: bold;
 }
 
-.missing {
-  color: red;
-  font-weight: bold;
-  text-decoration: underline;
+a:hover {
+    text-decoration: underline;
 }
 
-.pulse {
-  animation: pulse 1s infinite;
+.frase, .form {
+    background-color: #eee8d5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.glow {
-  box-shadow: 0 0 10px #00f;
+button {
+    background-color: #859900;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-.shadow {
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+button:hover {
+    background-color: #657b83;
 }
 
-.neon {
-  color: #0ff;
-  text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+.alfabeto {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.rainbow {
-  background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
-  color: white;
+.alfabeto a {
+    display: inline-block;
+    background-color: #b58900;
+    color: white;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+.voci {
+    list-style: none;
+    padding: 0;
+}
+
+.voci li {
+    background-color: #fefefe;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 5px solid #268bd2;
+    border-radius: 4px;
 }

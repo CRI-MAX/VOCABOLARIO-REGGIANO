@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Dizionario Reggiano</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>📖 Dizionario Reggiano</h1>
+
+    <div class="alfabeto">
+        {% for lettera in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+            <a href="{{ url_for('dizionario', lettera=lettera) }}">{{ lettera }}</a>
+        {% endfor %}
+    </div>
+
+    {% if lettera %}
+        <h2>Voci che iniziano con "{{ lettera }}"</h2>
+    {% endif %}
+
+    <ul class="voci">
+        {% for parola, dati in dizionario.items() %}
+            <li>
+                <strong>{{ parola }}</strong> → {{ dati.traduzione }} ({{ dati.spiegazione }})
+                {% if dati.sinonimi %}
+                    <em>[Sinonimi: {{ dati.sinonimi }}]</em>
+                {% endif %}
+                {% if dati.audio %}
+                    <audio controls>
+                        <source src="{{ url_for('static', filename='audio/' + dati.audio) }}" type="audio/mpeg">
+                    </audio>
+                {% endif %}
+            </li>
+        {% else %}
+            <p>Nessuna voce trovata.</p>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{ url_for('index') }}">⬅ Torna alla Home</a></p>
+</body>
+</html>
