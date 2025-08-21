@@ -121,19 +121,21 @@
     </p>
   </main>
 
-  <!-- Script per avvio automatico e dissolvenza -->
+  <!-- Script per avvio al primo tocco e dissolvenza -->
   <script>
     const audio = document.getElementById("introAudio");
+    let audioStarted = false;
 
-    // Avvio automatico appena possibile
-    window.addEventListener("DOMContentLoaded", () => {
-      audio.volume = 1.0;
-      audio.play().catch(() => {
-        console.log("Autoplay bloccato dal browser");
-      });
-    });
+    function startAudio() {
+      if (!audioStarted) {
+        audio.volume = 1.0;
+        audio.play().catch(() => {
+          console.log("Autoplay bloccato dal browser");
+        });
+        audioStarted = true;
+      }
+    }
 
-    // Funzione dissolvenza
     function fadeOutAudio() {
       const fadeInterval = setInterval(() => {
         if (audio.volume > 0.01) {
@@ -145,7 +147,11 @@
       }, 50);
     }
 
-    // Intercetta clic su qualsiasi voce del menu
+    // Avvio musica al primo tocco o clic
+    window.addEventListener("click", startAudio, { once: true });
+    window.addEventListener("touchstart", startAudio, { once: true });
+
+    // Interrompi musica in dissolvenza al clic su link o pulsanti
     document.querySelectorAll("a, button").forEach(el => {
       el.addEventListener("click", () => {
         fadeOutAudio();
