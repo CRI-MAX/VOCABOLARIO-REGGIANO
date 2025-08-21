@@ -1,86 +1,114 @@
+/* Impostazioni generali */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #fdf6e3;
-    color: #333;
-    margin: 0;
-    padding: 20px;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url("/static/immagini/sfondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #f4f4f4;
 }
 
-h1 {
-    color: #b58900;
-    text-align: center;
-    margin-bottom: 30px;
+/* Overlay per leggibilità */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: -1;
 }
 
-h2 {
-    color: #268bd2;
-    margin-top: 20px;
+/* Header */
+header {
+  text-align: center;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-size: 2rem;
+  font-weight: bold;
 }
 
-a {
-    color: #859900;
-    text-decoration: none;
-    margin: 0 5px;
-    font-weight: bold;
+/* Sezione Parola del Giorno */
+#parola-del-giorno {
+  margin: 2rem auto;
+  padding: 1rem;
+  max-width: 600px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  text-align: center;
 }
 
-a:hover {
-    text-decoration: underline;
+/* Form proposta nuova parola */
+form {
+  margin: 2rem auto;
+  max-width: 600px;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
-.frase, .form {
-    background-color: #eee8d5;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+form input, form textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+form button {
+  background-color: #f0c000;
+  color: #000;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-button {
-    background-color: #859900;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+form button:hover {
+  background-color: #ffd700;
 }
 
-button:hover {
-    background-color: #657b83;
+/* Link al dizionario completo */
+#link-dizionario {
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #f0c000;
+  text-decoration: underline;
 }
 
-.alfabeto {
-    text-align: center;
-    margin-bottom: 20px;
+/* Audio player */
+.audio-player {
+  margin-top: 1rem;
+  text-align: center;
 }
 
-.alfabeto a {
-    display: inline-block;
-    background-color: #b58900;
-    color: white;
-    padding: 5px 10px;
-    margin: 2px;
-    border-radius: 4px;
+audio {
+  width: 100%;
+  max-width: 300px;
 }
 
-.voci {
-    list-style: none;
-    padding: 0;
-}
+/* Responsive */
+@media screen and (max-width: 600px) {
+  header {
+    font-size: 1.5rem;
+  }
 
-.voci li {
-    background-color: #fefefe;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-left: 5px solid #268bd2;
-    border-radius: 4px;
+  #parola-del-giorno, form {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  form input, form textarea {
+    font-size: 0.9rem;
+  }
+
+  form button {
+    font-size: 0.9rem;
+  }
 }
