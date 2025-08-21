@@ -121,21 +121,36 @@
     </p>
   </main>
 
-  <!-- Script per avvio audio dopo interazione -->
+  <!-- Script per avvio automatico e dissolvenza -->
   <script>
     const audio = document.getElementById("introAudio");
 
-    function startAudio() {
+    // Avvio automatico appena possibile
+    window.addEventListener("DOMContentLoaded", () => {
       audio.volume = 1.0;
       audio.play().catch(() => {
         console.log("Autoplay bloccato dal browser");
       });
-      window.removeEventListener("click", startAudio);
-      window.removeEventListener("touchstart", startAudio);
+    });
+
+    // Funzione dissolvenza
+    function fadeOutAudio() {
+      const fadeInterval = setInterval(() => {
+        if (audio.volume > 0.01) {
+          audio.volume -= 0.01;
+        } else {
+          audio.pause();
+          clearInterval(fadeInterval);
+        }
+      }, 50);
     }
 
-    window.addEventListener("click", startAudio);
-    window.addEventListener("touchstart", startAudio);
+    // Intercetta clic su qualsiasi voce del menu
+    document.querySelectorAll("a, button").forEach(el => {
+      el.addEventListener("click", () => {
+        fadeOutAudio();
+      });
+    });
   </script>
 </body>
 </html>
