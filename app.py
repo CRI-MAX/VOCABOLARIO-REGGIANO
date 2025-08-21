@@ -1,6 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
-import json, os
+import json, os, logging
 from datetime import date
+import unicodedata
+def normalizza_nome(nome):
+    return unicodedata.normalize('NFKD', nome).encode('ASCII', 'ignore').decode().lower()
+
+# Configurazione logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
@@ -10,33 +16,38 @@ FRASI_PATH = "frasi.json"
 FRASI_SUGGERITE_PATH = "frasi_suggerite.json"
 AUDIO_FOLDER = "static/audio"
 
+# Funzione per creare file vuoto se non esiste
+def crea_file_vuoto(path):
+    if not os.path.exists(path):
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("{}" if "dizionario" in path else "[]")
+        logging.info(f"📁 File creato: {path}")
+
 # Funzioni di caricamento e salvataggio
 def carica_json(path):
-    if os.path.exists(path):
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                contenuto = f.read().strip()
-                if contenuto:
-                    return json.loads(contenuto)
-                else:
-                    print(f"ℹ️ Il file {path} è vuoto.")
-        except json.JSONDecodeError as e:
-            print(f"❌ Errore nel parsing di {path}: {e}")
-        except Exception as e:
-            print(f"❌ Errore generico nel caricamento di {path}: {e}")
-    else:
-        print(f"📁 Il file {path} non esiste. Creazione automatica.")
-    return {}
+    crea_file_vuoto(path)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            contenuto = f.read().strip()
+            if contenuto:
+                return json.loads(contenuto)
+            else:
+                logging.warning(f"ℹ️ Il file {path} è vuoto.")
+    except json.JSONDecodeError as e:
+        logging.error(f"❌ Errore nel parsing di {path}: {e}")
+    except Exception as e:
+        logging.error(f"❌ Errore generico nel caricamento di {path}: {e}")
+    return {} if "dizionario" in path else []
 
 def salva_json(path, dati):
     try:
         with open(path, "w", encoding="utf-8") as f:
             json.dump(dati, f, ensure_ascii=False, indent=4)
-        print("✅ Dizionario Reggiano avviato correttamente.")
+        logging.info(f"✅ Salvataggio riuscito: {path}")
     except Exception as e:
-        print(f"❌ Errore nel salvataggio di {path}: {e}")
+        logging.error(f"❌ Errore nel salvataggio di {path}: {e}")
 
-# Parola del giorno (fissa per ogni data)
+# Parola del giorno
 def parola_del_giorno():
     dizionario = carica_json(DIZIONARIO_PATH)
     if dizionario:
@@ -80,15 +91,16 @@ def proponi():
 
     if dialetto and italiano:
         dizionario = carica_json(DIZIONARIO_PATH)
-        dizionario[dialetto] = {
+        chiave = dialetto.lower()
+        dizionario[chiave] = {
             "traduzione": italiano,
             "spiegazione": spiegazione,
-            "audio": f"{dialetto}.mp3",
+            "audio": f"{chiave}.mp3",
             "sinonimi": ""
         }
         salva_json(DIZIONARIO_PATH, dizionario)
     else:
-        print("⚠️ Dati incompleti nel form. Nessuna voce aggiunta.")
+        logging.warning("⚠️ Dati incompleti nel form. Nessuna voce aggiunta.")
     return redirect(url_for("index"))
 
 # Frasi suggerite
@@ -112,5 +124,6 @@ def approva_frase():
         return redirect(url_for("frasi_suggerite"))
     return "Frase non valida", 400
 
+# Avvio server
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)  # Imposta a True solo in sviluppo

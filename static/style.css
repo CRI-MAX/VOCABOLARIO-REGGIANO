@@ -4,12 +4,14 @@ body {
   margin: 0;
   padding: 0;
   color: white;
-  background: linear-gradient(to right, #1e3c72, #2a5298), url("/static/immagini/sfondo.jpg");
+  background-image: url("/static/img/anziano.jpg"), linear-gradient(to right, #1e3c72, #2a5298);
+  background-blend-mode: overlay;
   background-size: cover;
   background-position: center 20%;
   background-repeat: no-repeat;
   background-attachment: fixed;
   transition: background-image 1s ease-in-out;
+  position: relative;
 }
 
 /* Overlay */
@@ -26,7 +28,7 @@ body {
 main {
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
   background-color: rgba(0, 0, 0, 0.6);
   padding: 2rem;
@@ -48,6 +50,41 @@ h1 {
 h2 {
   font-size: 1.5rem;
   color: #f0c000;
+}
+
+h3 {
+  font-size: 1.2rem;
+  color: #f0c000;
+}
+
+/* Navigazione alfabetica */
+.alfabeto {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.alfabeto a {
+  margin: 0 5px;
+  color: #f0c000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.alfabeto a:hover {
+  text-decoration: underline;
+}
+
+/* Lista voci */
+ul.voci {
+  list-style: none;
+  padding: 0;
+}
+
+ul.voci li {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
 }
 
 /* Form */
@@ -83,6 +120,19 @@ a {
 }
 
 a:hover {
+  text-decoration: underline;
+}
+
+/* Link di ritorno */
+a.back {
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+  color: #f0c000;
+  text-decoration: none;
+}
+
+a.back:hover {
   text-decoration: underline;
 }
 
@@ -123,5 +173,15 @@ audio {
     font-size: 1rem;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .alfabeto a {
+    display: inline-block;
+    margin: 3px;
+    font-size: 1rem;
+  }
+
+  ul.voci li {
+    font-size: 0.95rem;
   }
 }

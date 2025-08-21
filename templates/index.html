@@ -102,11 +102,13 @@
       <p><strong>Traduzione:</strong> {{ info.traduzione }}</p>
       <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
       {% if info.audio %}
-        <audio controls aria-label="Ascolta la pronuncia">
-          <source src="{{ url_for('static', filename='audio/' ~ info.audio) }}" type="audio/mpeg">
-          Il tuo browser non supporta l'audio.
-        </audio>
-      {% endif %}
+  <audio controls aria-label="Ascolta la pronuncia">
+    <source src="{{ url_for('static', filename='audio/' ~ info.audio) }}" type="audio/mpeg">
+    Il tuo browser non supporta l'audio.
+  </audio>
+{% else %}
+  <p><em>Audio non disponibile</em></p>
+{% endif %}
     </section>
 
     <section>
@@ -141,7 +143,10 @@
         console.log("Autoplay bloccato dal browser");
       });
     });
-
+    window.onload = () => {
+  audio.muted = false;
+  audio.play().catch(() => {});
+};
     function fadeOutAudio() {
       const fadeInterval = setInterval(() => {
         if (audio.volume > 0.01) {
