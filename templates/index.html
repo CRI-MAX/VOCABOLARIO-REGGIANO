@@ -5,16 +5,6 @@
   <title>Dizionario Reggiano</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-image: url("/static/immagini/sfondo.jpg");
-      background-size: cover;
-      background-position: center 20%;
-      background-repeat: no-repeat;
-      color: white;
-      position: relative;
-    }
     .overlay {
       position: absolute;
       top: 0; left: 0;
@@ -65,7 +55,7 @@
   <div class="overlay"></div>
 
   <!-- Musica di sottofondo -->
-  <audio id="introAudio" autoplay>
+  <audio id="introAudio" autoplay muted>
     <source src="{{ url_for('static', filename='audio/intro.mp3') }}" type="audio/mpeg">
     Il tuo browser non supporta l'audio.
   </audio>
@@ -113,7 +103,14 @@
   <!-- Script dissolvenza audio -->
   <script>
     const audio = document.getElementById("introAudio");
-    audio.volume = 1.0;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      audio.muted = false;
+      audio.volume = 1.0;
+      audio.play().catch(() => {
+        console.log("Autoplay bloccato dal browser");
+      });
+    });
 
     function fadeOutAudio() {
       let volume = audio.volume;
