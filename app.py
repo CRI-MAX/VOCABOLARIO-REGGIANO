@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-import json, random, os
+from flask import Flask, render_template, request, redirect, url_for
+import json, os
 from datetime import date
 
 app = Flask(__name__)
@@ -7,7 +7,6 @@ app = Flask(__name__)
 # Percorsi file
 DIZIONARIO_PATH = "dizionario.json"
 FRASI_PATH = "frasi.json"
-PROPOSTE_PATH = "proposte.json"
 FRASI_SUGGERITE_PATH = "frasi_suggerite.json"
 AUDIO_FOLDER = "static/audio"
 
@@ -27,7 +26,7 @@ def carica_json(path):
             print(f"❌ Errore generico nel caricamento di {path}: {e}")
     else:
         print(f"📁 Il file {path} non esiste. Creazione automatica.")
-    return []
+    return {}
 
 def salva_json(path, dati):
     try:
@@ -37,11 +36,13 @@ def salva_json(path, dati):
     except Exception as e:
         print(f"❌ Errore nel salvataggio di {path}: {e}")
 
-# Parola del giorno
+# Parola del giorno (fissa per ogni data)
 def parola_del_giorno():
     dizionario = carica_json(DIZIONARIO_PATH)
     if dizionario:
-        parola = random.choice(list(dizionario.keys()))
+        chiavi = list(dizionario.keys())
+        giorno = date.today().toordinal()
+        parola = chiavi[giorno % len(chiavi)]
         info = dizionario[parola]
     else:
         parola = "Nessuna parola"
@@ -90,7 +91,7 @@ def proponi():
         print("⚠️ Dati incompleti nel form. Nessuna voce aggiunta.")
     return redirect(url_for("index"))
 
-# Proposta nuova frase
+# Frasi suggerite
 @app.route("/frasi-suggerite")
 def frasi_suggerite():
     suggerite = carica_json(FRASI_SUGGERITE_PATH)

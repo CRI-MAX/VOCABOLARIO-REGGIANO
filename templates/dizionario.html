@@ -1,41 +1,114 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Dizionario Reggiano</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Dizionario Reggiano</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-image: url("/static/img/anziano.jpg");
+      background-size: cover;
+      background-position: center 20%;
+      background-repeat: no-repeat;
+      color: white;
+      position: relative;
+    }
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .alfabeto {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .alfabeto a {
+      margin: 0 5px;
+      color: #f0c000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .alfabeto a:hover {
+      text-decoration: underline;
+    }
+    ul.voci {
+      list-style: none;
+      padding: 0;
+    }
+    ul.voci li {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+    }
+    audio {
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+    a.back {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      color: #f0c000;
+      text-decoration: none;
+    }
+    a.back:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+  <div class="overlay"></div>
+  <main>
     <h1>📖 Dizionario Reggiano</h1>
 
     <div class="alfabeto">
-        {% for lettera in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
-            <a href="{{ url_for('dizionario', lettera=lettera) }}">{{ lettera }}</a>
-        {% endfor %}
+      {% for lettera in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+        <a href="{{ url_for('dizionario', lettera=lettera) }}">{{ lettera }}</a>
+      {% endfor %}
     </div>
 
     {% if lettera %}
-        <h2>Voci che iniziano con "{{ lettera }}"</h2>
+      <h2>Voci che iniziano con "{{ lettera }}"</h2>
     {% endif %}
 
     <ul class="voci">
-        {% for parola, dati in dizionario.items() %}
-            <li>
-                <strong>{{ parola }}</strong> → {{ dati.traduzione }} ({{ dati.spiegazione }})
-                {% if dati.sinonimi %}
-                    <em>[Sinonimi: {{ dati.sinonimi }}]</em>
-                {% endif %}
-                {% if dati.audio %}
-                    <audio controls>
-                        <source src="{{ url_for('static', filename='audio/' + dati.audio) }}" type="audio/mpeg">
-                    </audio>
-                {% endif %}
-            </li>
-        {% else %}
-            <p>Nessuna voce trovata.</p>
-        {% endfor %}
+      {% for parola, dati in dizionario.items() %}
+        <li>
+          <strong>{{ parola }}</strong> → {{ dati.traduzione }}
+          {% if dati.spiegazione %}<br><em>{{ dati.spiegazione }}</em>{% endif %}
+          {% if dati.sinonimi %}
+            <br><em>[Sinonimi: {{ dati.sinonimi }}]</em>
+          {% endif %}
+          {% if dati.audio %}
+            <audio controls>
+              <source src="{{ url_for('static', filename='audio/' + dati.audio) }}" type="audio/mpeg">
+              Il tuo browser non supporta l'audio.
+            </audio>
+          {% endif %}
+        </li>
+      {% else %}
+        <p>Nessuna voce trovata.</p>
+      {% endfor %}
     </ul>
 
-    <p><a href="{{ url_for('index') }}">⬅ Torna alla Home</a></p>
+    <a class="back" href="{{ url_for('index') }}">⬅ Torna alla Home</a>
+  </main>
 </body>
 </html>
