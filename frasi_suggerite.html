@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Frasi Suggerite</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    .frase-box {
+      background: #fff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    form {
+      display: inline;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Frasi Suggerite dagli Utenti</h1>
+  {% for frase in frasi %}
+    <div class="frase-box">
+      <p>{{ frase }}</p>
+      <form action="{{ url_for('approva_frase') }}" method="post">
+        <input type="hidden" name="frase" value="{{ frase }}">
+        <button type="submit">Approva</button>
+      </form>
+    </div>
+  {% else %}
+    <p>Nessuna frase suggerita al momento.</p>
+  {% endfor %}
+</body>
+</html>

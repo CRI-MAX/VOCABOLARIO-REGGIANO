@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Dizionario Reggiano</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Dizionario Reggiano</title>
+  <meta name="description" content="Dizionario Reggiano: scopri le parole, traduzioni e audio del dialetto reggiano.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="overlay"></div>
+  <main>
     <h1>📖 Dizionario Reggiano</h1>
 
     <div class="alfabeto">
-        {% for lettera in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
-            <a href="{{ url_for('dizionario', lettera=lettera) }}">{{ lettera }}</a>
-        {% endfor %}
+      {% for lettera in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+        <a href="{{ url_for('dizionario', lettera=lettera) }}" title="Voci con {{ lettera }}">{{ lettera }}</a>
+      {% endfor %}
     </div>
 
     {% if lettera %}
-        <h2>Voci che iniziano con "{{ lettera }}"</h2>
+      <h2>Voci che iniziano con "{{ lettera }}"</h2>
     {% endif %}
 
     <ul class="voci">
-        {% for parola, dati in dizionario.items() %}
-            <li>
-                <strong>{{ parola }}</strong> → {{ dati.traduzione }} ({{ dati.spiegazione }})
-                {% if dati.sinonimi %}
-                    <em>[Sinonimi: {{ dati.sinonimi }}]</em>
-                {% endif %}
-                {% if dati.audio %}
-                    <audio controls>
-                        <source src="{{ url_for('static', filename='audio/' + dati.audio) }}" type="audio/mpeg">
-                    </audio>
-                {% endif %}
-            </li>
-        {% else %}
-            <p>Nessuna voce trovata.</p>
-        {% endfor %}
+      {% for parola, dati in dizionario.items() %}
+        <li>
+          <strong>{{ parola }}</strong> → {{ dati.traduzione }}
+          {% if dati.spiegazione %}<br><em>{{ dati.spiegazione }}</em>{% endif %}
+          {% if dati.sinonimi %}
+            <br><em>[Sinonimi: {{ dati.sinonimi }}]</em>
+          {% endif %}
+          {% if dati.audio %}
+            <audio controls aria-label="Audio per {{ parola }}">
+              <source src="{{ url_for('static', filename='audio/' + dati.audio) }}" type="audio/mpeg">
+              Il tuo browser non supporta l'audio.
+            </audio>
+          {% endif %}
+        </li>
+      {% else %}
+        <p>Nessuna voce trovata.</p>
+      {% endfor %}
     </ul>
 
-    <p><a href="{{ url_for('index') }}">⬅ Torna alla Home</a></p>
+    <a class="back" href="{{ url_for('index') }}">⬅ Torna alla Home</a>
+  </main>
 </body>
 </html>
