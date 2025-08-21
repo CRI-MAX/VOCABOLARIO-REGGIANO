@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dizionario Reggiano</title>
 
-  <!-- Icone e splash screen -->
+  <!-- Icone -->
   <link rel="icon" href="{{ url_for('static', filename='icons/rofaldo.png') }}" type="image/png">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/rofaldo.png') }}">
   <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='icons/splash.png') }}">
@@ -14,38 +14,52 @@
   <meta name="apple-mobile-web-app-title" content="Dizionario Reggiano">
 
   <!-- Stili -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #1e3c72, #2a5298);
-      color: white;
+      background: #f4f4f4;
+      color: #222;
     }
 
     main {
       padding: 2rem;
       max-width: 800px;
       margin: auto;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: #fff;
       border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     h1, h2 {
       text-align: center;
+      color: #000;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    section {
+      margin-top: 2rem;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
     }
 
-    input, textarea, button {
-      padding: 0.5rem;
+    label {
+      font-weight: bold;
+    }
+
+    input, textarea {
+      padding: 0.75rem;
       border-radius: 5px;
-      border: none;
+      border: 1px solid #ccc;
       font-size: 1rem;
     }
 
@@ -53,7 +67,14 @@
       background-color: #f0c000;
       color: black;
       font-weight: bold;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e0b000;
     }
 
     audio {
@@ -65,10 +86,16 @@
     a {
       color: #f0c000;
       text-decoration: none;
+      font-weight: bold;
     }
 
     a:hover {
       text-decoration: underline;
+    }
+
+    .no-audio {
+      color: #888;
+      font-style: italic;
     }
   </style>
 </head>
@@ -90,14 +117,14 @@
       <h2>Parola del Giorno</h2>
       <h3>{{ parola }}</h3>
       <p><strong>Traduzione:</strong> {{ info.traduzione }}</p>
-      <p><strong>Spiegazione:</strong> {{ info.spiegazione }}</p>
+      <p><strong>Spiegazione:</strong> {{ info.spiegazione or "—" }}</p>
       {% if info.audio %}
         <audio controls aria-label="Ascolta la pronuncia">
           <source src="{{ url_for('static', filename=info.audio) }}" type="audio/mpeg">
           Il tuo browser non supporta l'audio.
         </audio>
       {% else %}
-        <p><em>🔇 Audio non disponibile</em></p>
+        <p class="no-audio">🔇 Audio non disponibile</p>
       {% endif %}
     </section>
 
@@ -122,7 +149,7 @@
     </p>
   </main>
 
-  <!-- Script per avvio al primo tocco e dissolvenza -->
+  <!-- Script per avvio audio -->
   <script>
     const audio = document.getElementById("introAudio");
     let audioStarted = false;
