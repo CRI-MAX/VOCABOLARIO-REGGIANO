@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Sfondo e Musica</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-image: url("static/immagini/sfondo.jpg");
+      background-size: cover;
+      background-position: center 20%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: 100vh;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    audio#introAudio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Test Sfondo e Musica</h1>
+
+  <audio id="introAudio" autoplay>
+    <source src="static/audio/intro.mp3" type="audio/mpeg">
+    Il tuo browser non supporta l'audio.
+  </audio>
+
+  <script>
+    const audio = document.getElementById("introAudio");
+    audio.volume = 1.0;
+
+    function fadeOutAudio() {
+      let volume = audio.volume;
+      const fadeInterval = setInterval(() => {
+        if (volume > 0.01) {
+          volume -= 0.01;
+          audio.volume = volume;
+        } else {
+          audio.pause();
+          clearInterval(fadeInterval);
+        }
+      }, 50);
+    }
+
+    function handleInteraction() {
+      fadeOutAudio();
+      window.removeEventListener("keydown", handleInteraction);
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    }
+
+    window.addEventListener("keydown", handleInteraction);
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+  </script>
+
+</body>
+</html>
